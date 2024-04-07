@@ -4,15 +4,16 @@ using namespace std;
 #define ll	long long
 
 int main(){
-    string s;
-    cin >> s;
-    for (int i = 0; i < s.size();i++){
-        if (s[i] > '4'){
-            s[i] = '9' - s[i] + '0';
+    char matrix[6][7];
+    for (int i = 0; i < 6;i++){
+        for (int j = 0; j < 7;j++){
+            matrix[i][j] = ' ';
         }
     }
-    if (s[0] == '0'){
-        s[0] = '9';
+    for (int i = 0; i < 6;i++){
+        for (int j = 0; j < 7;j++){
+            cout << "|" <<  matrix[i][j] << "|";
+        }
+        cout << endl;
     }
-    cout << s << endl;
 }
