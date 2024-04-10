@@ -35,10 +35,12 @@ int main(){
         }
         if(thereIsWinner(currPlayer,playersSymbols,currColumn,startPlace)){
             winnerMessage(currPlayer,playersSymbols);
-            break;
+            return 0;
         }
     }
+    cout << "Tie";
 }
+
 void createMatrix(){
     for (int i = 0; i < rows;i++){
         for (int j = 0; j < cols;j++){
@@ -77,6 +79,9 @@ void getInput(int& currColumn,int& startPlace){
 
 bool addSymbolToMatrix(int currColumn,int currPlayer, char playersSymbols[]){
     for (int i = rows-1; i >= 0;i--){
+        if (currColumn >= 7 || currColumn <= 0){
+            return false;
+        }
         if (matrix[i][currColumn] == ' '){
             matrix[i][currColumn] = playersSymbols[currPlayer];
             return true;
