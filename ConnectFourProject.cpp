@@ -45,6 +45,7 @@ int main(){
         }
         if (thereIsTie()){
             tieMessage();
+            return 0;
         }
     }
 }
