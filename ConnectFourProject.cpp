@@ -15,11 +15,11 @@ void ChangeCurrPlayer(int& currPlayer);
 void printCurrPlayerMessage(int& currPlayer, char playersSymbols[]);
 void getInput (int& currColumn,int& currRow);
 bool addSymbolToMatrix(int currColumn,int currPlayer, char playersSymbols[]);
-bool thereIsWinner(int currPlayer, char playersSymbols[],int currColumn,int currRow);
-bool thereIsWinnerAtRow(int currPlayer, char playersSymbols[],int currColumn);
-bool thereIsWinnerAtCol(int currPlayer, char playersSymbols[],int currColumn,int currRow);
-bool thereIsWinnerAtRightDia(int currPlayer, char playersSymbols[],int currColumn,int currRow);
-bool thereIsWinnerAtLeftDia(int currPlayer, char playersSymbols[],int currColumn,int currRow);
+bool thereIsWinner(int currColumn,int currRow);
+bool thereIsWinnerAtRow(int currColumn);
+bool thereIsWinnerAtCol(int currColumn,int currRow);
+bool thereIsWinnerAtRightDia(int currColumn,int currRow);
+bool thereIsWinnerAtLeftDia(int currColumn,int currRow);
 void winnerMessage(int currPlayer, char playersSymbols[]);
 bool thereIsTie();
 void tieMessage();
@@ -39,7 +39,7 @@ int main(){
             printCurrPlayerMessage(currPlayer,playersSymbols);
             getInput(currColumn,currRow);
         }
-        if(thereIsWinner(currPlayer,playersSymbols,currColumn,currRow)){
+        if(thereIsWinner(currColumn,currRow)){
             winnerMessage(currPlayer,playersSymbols);
             return 0;
         }
@@ -101,15 +101,15 @@ bool addSymbolToMatrix(int currColumn,int currPlayer, char playersSymbols[]){
     return false;
 }
 
-bool thereIsWinner(int currPlayer, char playersSymbols[],int currColumn,int currRow){
-    bool checkRightDia = thereIsWinnerAtRightDia(currPlayer,playersSymbols,currColumn,currRow);
-    bool checkRow =  thereIsWinnerAtRow(currPlayer,playersSymbols,currColumn);
-    bool checkCol =  thereIsWinnerAtCol(currPlayer,playersSymbols,currColumn,currRow);
-    bool checkleftDia = thereIsWinnerAtLeftDia(currPlayer,playersSymbols,currColumn,currRow);
+bool thereIsWinner(int currColumn,int currRow){
+    bool checkRightDia = thereIsWinnerAtRightDia(currColumn,currRow);
+    bool checkRow =  thereIsWinnerAtRow(currColumn);
+    bool checkCol =  thereIsWinnerAtCol(currColumn,currRow);
+    bool checkleftDia = thereIsWinnerAtLeftDia(currColumn,currRow);
     return (checkRow || checkCol || checkRightDia || checkleftDia);
 }
 
-bool thereIsWinnerAtRow(int currPlayer, char playersSymbols[],int currColumn){
+bool thereIsWinnerAtRow(int currColumn){
     int ans = 1;
     for (int i = rows - 1; i > 0; i--){
         if (matrix[i][currColumn] != ' '){
@@ -127,7 +127,7 @@ bool thereIsWinnerAtRow(int currPlayer, char playersSymbols[],int currColumn){
     return false;
 }
 
-bool thereIsWinnerAtCol(int currPlayer, char playersSymbols[],int currColumn,int currRow){
+bool thereIsWinnerAtCol(int currColumn,int currRow){
     int ans = 1;
     for (int i = cols - 1; i > 0; i--){
         if (matrix[currRow][i] != ' '){
@@ -145,12 +145,12 @@ bool thereIsWinnerAtCol(int currPlayer, char playersSymbols[],int currColumn,int
     return false;
 }
 
-bool thereIsWinnerAtRightDia(int currPlayer, char playersSymbols[],int currColumn,int currRow){
+bool thereIsWinnerAtRightDia(int currColumn,int currRow){
     int ans = 1;
     for (;currColumn < cols - 1 && currRow > 0; currColumn++,currRow--);
-    for (int i = currRow; i < rows-1; i++){ 
-        if (matrix[i][currColumn] != ' '){
-            if (matrix[i][currColumn] == matrix[i+1][currColumn-1]){
+    for (; currRow < rows - 1 && currColumn > 0;currColumn--,currRow++){ 
+        if (matrix[currRow][currColumn] != ' '){
+            if (matrix[currRow][currColumn] == matrix[currRow+1][currColumn-1]){
                 ans++;
                 if (ans >= 4){
                     return true;
@@ -160,14 +160,11 @@ bool thereIsWinnerAtRightDia(int currPlayer, char playersSymbols[],int currColum
                 ans = 1;
             }
         }
-        if (currColumn != 0){
-            currColumn--;
-        }
     }
     return false;
 }
 
-bool thereIsWinnerAtLeftDia(int currPlayer, char playersSymbols[],int currColumn,int currRow){
+bool thereIsWinnerAtLeftDia(int currColumn,int currRow){
     int ans = 1;
     if (currColumn >= currRow){
         currColumn -= currRow;
@@ -177,9 +174,9 @@ bool thereIsWinnerAtLeftDia(int currPlayer, char playersSymbols[],int currColumn
         currRow -= currColumn;
         currColumn -= currColumn;
     }
-    for (int i = currRow; i < rows-1; i++){ 
-        if (matrix[i][currColumn] != ' '){
-            if (matrix[i][currColumn] == matrix[i+1][currColumn+1]){
+    for (;currRow < rows - 1 && currColumn < 7; currColumn++,currRow++){ 
+        if (matrix[currRow][currColumn] != ' '){
+            if (matrix[currRow][currColumn] == matrix[currRow+1][currColumn+1]){
                 ans++;
                 if (ans >= 4){
                     return true;
@@ -188,9 +185,6 @@ bool thereIsWinnerAtLeftDia(int currPlayer, char playersSymbols[],int currColumn
             else {
                 ans = 1;
             }
-        }
-        if (currColumn != 6){
-            currColumn++;
         }
     }
     return false;
